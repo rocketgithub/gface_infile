@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="invoice_form_gface_infile">
+            <field name="name">account.invoice.form.gface_infile</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="comment" position="after">
+                        <group>
+                            <field name="firma_gface"/>
+                            <field name="pdf_gface"/>
+                        </group>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="journal_form_gface_infile">
+            <field name="name">account.journal.form.gface_infile</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="sequence_id" position="after">
+                        <field name="usuario_gface"/>
+                        <field name="clave_gface"/>
+                        <field name="tipo_documento_gface"/>
+                        <field name="serie_documento_gface"/>
+                        <field name="serie_gface"/>
+                        <field name="numero_resolucion_gface"/>
+                        <field name="fecha_resolucion_gface"/>
+                        <field name="rango_inicial_gface"/>
+                        <field name="rango_final_gface"/>
+                        <field name="numero_establecimiento_gface"/>
+                        <field name="dispositivo_gface"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>
