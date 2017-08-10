@@ -19,13 +19,13 @@ class AccountInvoice(models.Model):
         detalles = []
         subtotal = 0
         for factura in self:
-            if factura.journal_id.usuario_gface and not factura.factura_pdf:
+            if factura.journal_id.usuario_gface and not factura.firma_gface:
                 descuento_total = 0
                 for linea in factura.invoice_line_ids:
                     det = {}
 
                     det["detalleImpuestosIva"] = 0
-                    r = linea.invoice_line_tax_ids.compute_all(precio, currency=factura.currency_id, quantity=linea.quantity, product=linea.product_id, partner=factura.partner_id)
+                    r = linea.invoice_line_tax_ids.compute_all(linea.price_unit, currency=factura.currency_id, quantity=linea.quantity, product=linea.product_id, partner=factura.partner_id)
                     for impuestos in r['taxes']:
                         det["detalleImpuestosIva"] = impuestos['amount']
 
@@ -52,6 +52,7 @@ class AccountInvoice(models.Model):
                 dte = {}
                 dte["usuario"] = factura.journal_id.usuario_gface
                 dte["clave"] = factura.journal_id.clave_gface
+                dte["validador"] = False
                 dte["dte"] = {}
                 dte["dte"]["tipoDocumento"] = factura.journal_id.tipo_documento_gface
                 dte["dte"]["estadoDocumento"] = "Activo"
@@ -99,7 +100,8 @@ class AccountInvoice(models.Model):
 
                 if resultado["estado"] == "1":
                     factura.firma_gface = resultado['cae']
-                    factura.pdf_gface = resultado['cae']
+                    # factura.pdf_gface = resultado['cae']
+                    factura.name = resultado['numeroDte']
                 else:
                     raise UserError(resultado["descripcion"])
 
@@ -109,7 +111,7 @@ class AccountJournal(models.Model):
     _inherit = "account.journal"
 
     usuario_gface = fields.Char('Usuario GFACE', copy=False)
-    clave_gface = fields.Char('Usuario GFACE', copy=False)
+    clave_gface = fields.Char('Clave GFACE', copy=False)
     tipo_documento_gface = fields.Selection([('FACE', 'FACE')], 'Tipo de Documento GFACE', copy=False)
     serie_documento_gface = fields.Selection([('63', '63')], 'Serie de Documento GFACE', copy=False)
     serie_gface = fields.Char('Serie GFACE', copy=False)
