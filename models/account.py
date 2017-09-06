@@ -112,11 +112,12 @@ class AccountJournal(models.Model):
 
     usuario_gface = fields.Char('Usuario GFACE', copy=False)
     clave_gface = fields.Char('Clave GFACE', copy=False)
+    nombre_establecimiento = fields.Char('Nombre Establecimiento GFACE', copy=False)
     tipo_documento_gface = fields.Selection([('FACE', 'FACE')], 'Tipo de Documento GFACE', copy=False)
     serie_documento_gface = fields.Selection([('63', '63')], 'Serie de Documento GFACE', copy=False)
     serie_gface = fields.Char('Serie GFACE', copy=False)
     numero_resolucion_gface = fields.Char('Numero Resolucion GFACE', copy=False)
-    fecha_resolucion_gface = fields.Char('Fecha Resolución GFACE', copy=False)
+    fecha_resolucion_gface = fields.Date('Fecha Resolución GFACE', copy=False)
     rango_inicial_gface = fields.Integer('Rango Inicial GFACE', copy=False)
     rango_final_gface = fields.Integer('Rango Final GFACE', copy=False)
     numero_establecimiento_gface = fields.Char('Numero Establecimiento GFACE', copy=False)
