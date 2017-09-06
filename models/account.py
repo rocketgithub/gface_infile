@@ -56,7 +56,7 @@ class AccountInvoice(models.Model):
                 dte["dte"] = {}
                 dte["dte"]["tipoDocumento"] = factura.journal_id.tipo_documento_gface
                 dte["dte"]["estadoDocumento"] = "Activo"
-                dte["dte"]["numeroDocumento"] = factura.id
+                dte["dte"]["numeroDocumento"] = "odoo_aquih_"+str(factura.id)
                 dte["dte"]["serieAutorizada"] = factura.journal_id.serie_gface
                 dte["dte"]["codigoMoneda"] = "GTQ"
                 dte["dte"]["tipoCambio"] = 1
