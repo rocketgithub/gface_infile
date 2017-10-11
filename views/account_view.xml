@@ -11,7 +11,7 @@
                     <field name="comment" position="after">
                         <group>
                             <field name="firma_gface"/>
-                            <field name="pdf_gface"/>
+                            <field name="pdf_gface" widget="url"/>
                         </group>
                     </field>
                 </data>
@@ -27,7 +27,7 @@
                     <field name="sequence_id" position="after">
                         <field name="usuario_gface"/>
                         <field name="clave_gface"/>
-                        <field name="nombre_establecimiento"/>
+                        <field name="nombre_establecimiento_gface"/>
                         <field name="tipo_documento_gface"/>
                         <field name="serie_documento_gface"/>
                         <field name="serie_gface"/>

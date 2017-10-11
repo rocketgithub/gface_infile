@@ -13,7 +13,7 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     firma_gface = fields.Char('Firma GFACE', copy=False)
-    pdf_gface = fields.Binary('PDF GFACE', copy=False)
+    pdf_gface = fields.Char('PDF GFACE', copy=False)
 
     def invoice_validate(self):
         detalles = []
@@ -32,7 +32,7 @@ class AccountInvoice(models.Model):
                     det["unidadMedida"] = "UND"
                     det["cantidad"] = linea.quantity
                     det["codigoProducto"] = linea.product_id.default_code
-                    det["descripcionProducto"] = linea.product_id.name
+                    det["descripcionProducto"] = linea.name
                     det["precioUnitario"] = linea.price_unit
                     det["montoBruto"] = linea.price_subtotal
                     det["montoDescuento"] = (linea.price_unit * linea.quantity) * (linea.discount / 100)
@@ -100,7 +100,7 @@ class AccountInvoice(models.Model):
 
                 if resultado["estado"] == "1":
                     factura.firma_gface = resultado['cae']
-                    # factura.pdf_gface = resultado['cae']
+                    factura.pdf_gface = 'https://www.ingface.net/Ingfacereport/dtefactura.jsp?cae='+resultado['cae']
                     factura.name = resultado['numeroDte']
                 else:
                     raise UserError(resultado["descripcion"])
@@ -112,7 +112,7 @@ class AccountJournal(models.Model):
 
     usuario_gface = fields.Char('Usuario GFACE', copy=False)
     clave_gface = fields.Char('Clave GFACE', copy=False)
-    nombre_establecimiento = fields.Char('Nombre Establecimiento GFACE', copy=False)
+    nombre_establecimiento_gface = fields.Char('Nombre Establecimiento GFACE', copy=False)
     tipo_documento_gface = fields.Selection([('FACE', 'FACE')], 'Tipo de Documento GFACE', copy=False)
     serie_documento_gface = fields.Selection([('63', '63')], 'Serie de Documento GFACE', copy=False)
     serie_gface = fields.Char('Serie GFACE', copy=False)
