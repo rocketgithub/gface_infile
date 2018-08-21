@@ -9,10 +9,8 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="comment" position="after">
-                        <group>
-                            <field name="firma_gface"/>
-                            <field name="pdf_gface" widget="url"/>
-                        </group>
+                        <field name="firma_gface"/>
+                        <field name="pdf_gface" widget="url"/>
                     </field>
                 </data>
             </field>
@@ -24,7 +22,7 @@
             <field name="inherit_id" ref="account.view_account_journal_form"/>
             <field name="arch" type="xml">
                 <data>
-                    <field name="sequence_id" position="after">
+                    <field name="group_invoice_lines" position="after">
                         <field name="usuario_gface"/>
                         <field name="clave_gface"/>
                         <field name="nombre_establecimiento_gface"/>

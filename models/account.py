@@ -6,7 +6,6 @@ from openerp.exceptions import UserError, ValidationError
 from datetime import datetime
 import base64
 import zeep
-
 import logging
 
 class AccountInvoice(models.Model):
