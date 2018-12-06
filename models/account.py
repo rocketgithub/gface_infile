@@ -113,7 +113,7 @@ class AccountJournal(models.Model):
     clave_gface = fields.Char('Clave GFACE', copy=False)
     nombre_establecimiento_gface = fields.Char('Nombre Establecimiento GFACE', copy=False)
     tipo_documento_gface = fields.Selection([('FACE', 'FACE')], 'Tipo de Documento GFACE', copy=False)
-    serie_documento_gface = fields.Selection([('63', '63')], 'Serie de Documento GFACE', copy=False)
+    serie_documento_gface = fields.Selection([('63', '63'),('66', '66')], 'Serie de Documento GFACE', copy=False)
     serie_gface = fields.Char('Serie GFACE', copy=False)
     numero_resolucion_gface = fields.Char('Numero Resolucion GFACE', copy=False)
     fecha_resolucion_gface = fields.Date('Fecha Resolución GFACE', copy=False)
