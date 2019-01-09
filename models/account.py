@@ -32,9 +32,10 @@ class AccountInvoice(models.Model):
                     det["cantidad"] = linea.quantity
                     det["codigoProducto"] = linea.product_id.default_code
                     det["descripcionProducto"] = linea.name
-                    det["precioUnitario"] = linea.price_unit
-                    det["montoBruto"] = linea.price_subtotal
-                    det["montoDescuento"] = (linea.price_unit * linea.quantity) * (linea.discount / 100)
+                    det["precioUnitario"] = linea.price_unit * linea.discount / 100
+                    det["montoBruto"] = linea.price_subtotal * det["cantidad"]
+                    # det["montoDescuento"] = (linea.price_unit * linea.quantity) * (linea.discount / 100)
+                    det["montoDescuento"] = 0
                     det["importeNetoGravado"] = det["cantidad"] * det["precioUnitario"]
                     det["importeExento"] = 0
                     det["importeOtrosImpuestos"] = 0
