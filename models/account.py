@@ -23,11 +23,6 @@ class AccountInvoice(models.Model):
                 for linea in factura.invoice_line_ids:
                     det = {}
 
-                    det["detalleImpuestosIva"] = 0
-                    r = linea.invoice_line_tax_ids.compute_all(linea.price_unit, currency=factura.currency_id, quantity=linea.quantity, product=linea.product_id, partner=factura.partner_id)
-                    for impuestos in r['taxes']:
-                        det["detalleImpuestosIva"] = impuestos['amount']
-
                     det["unidadMedida"] = "UND"
                     det["cantidad"] = linea.quantity
                     det["codigoProducto"] = linea.product_id.default_code
@@ -40,6 +35,11 @@ class AccountInvoice(models.Model):
                     det["importeExento"] = 0
                     det["importeOtrosImpuestos"] = 0
                     det["importeTotalOperacion"] = det["cantidad"] * det["precioUnitario"]
+                    det["detalleImpuestosIva"] = 0
+                    r = linea.invoice_line_tax_ids.compute_all(det["precioUnitario"], currency=factura.currency_id, quantity=det["cantidad"], product=linea.product_id, partner=factura.partner_id)
+                    for impuestos in r['taxes']:
+                        det["detalleImpuestosIva"] = impuestos['amount']
+
                     if linea.product_id.type == "service":
                         det["tipoProducto"] = "S"
                     else:
