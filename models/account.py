@@ -59,7 +59,16 @@ class AccountInvoice(models.Model):
                 dte["dte"]["numeroDocumento"] = "odoo_aquih_"+str(factura.id)
                 dte["dte"]["serieAutorizada"] = factura.journal_id.serie_gface
                 dte["dte"]["codigoMoneda"] = "GTQ"
+                if factura.currency_id.id != factura.company_id.currency_id.id:
+                    dte["dte"]["codigoMoneda"] = "USD"
                 dte["dte"]["tipoCambio"] = 1
+                if factura.currency_id.id != factura.company_id.currency_id.id:
+                    total = 0
+                    for l in factura.move_id.line_ids:
+                        if l.account_id.id == factura.account_id.id:
+                            total += l.debit - l.credit
+                    tipo_cambio = abs(total / factura.amount_total)
+                    dte["dte"]["tipoCambio"] = tipo_cambio
                 dte["dte"]["regimen2989"] = False
                 dte["dte"]["regimenISR"] = "RET_DEFINITIVA"
                 dte["dte"]["correoComprador"] = "N/A"
