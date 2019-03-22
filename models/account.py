@@ -19,6 +19,15 @@ class AccountInvoice(models.Model):
         subtotal = 0
         for factura in self:
             if factura.journal_id.usuario_gface and not factura.firma_gface:
+
+                tipo_cambio = 1
+                if factura.currency_id.id != factura.company_id.currency_id.id:
+                    total = 0
+                    for l in factura.move_id.line_ids:
+                        if l.account_id.id == factura.account_id.id:
+                            total += l.debit - l.credit
+                    tipo_cambio = abs(total / factura.amount_total)
+
                 descuento_total = 0
                 for linea in factura.invoice_line_ids:
                     det = {}
@@ -27,7 +36,7 @@ class AccountInvoice(models.Model):
                     det["cantidad"] = linea.quantity
                     det["codigoProducto"] = linea.product_id.default_code
                     det["descripcionProducto"] = linea.name
-                    det["precioUnitario"] = linea.price_unit * ( 1 - linea.discount / 100 )
+                    det["precioUnitario"] = linea.price_unit * ( 1 - linea.discount / 100 ) * tipo_cambio
                     det["montoBruto"] = linea.price_subtotal * det["cantidad"]
                     # det["montoDescuento"] = (linea.price_unit * linea.quantity) * (linea.discount / 100)
                     det["montoDescuento"] = 0
@@ -61,14 +70,7 @@ class AccountInvoice(models.Model):
                 dte["dte"]["codigoMoneda"] = "GTQ"
                 if factura.currency_id.id != factura.company_id.currency_id.id:
                     dte["dte"]["codigoMoneda"] = "USD"
-                dte["dte"]["tipoCambio"] = 1
-                if factura.currency_id.id != factura.company_id.currency_id.id:
-                    total = 0
-                    for l in factura.move_id.line_ids:
-                        if l.account_id.id == factura.account_id.id:
-                            total += l.debit - l.credit
-                    tipo_cambio = abs(total / factura.amount_total)
-                    dte["dte"]["tipoCambio"] = tipo_cambio
+                dte["dte"]["tipoCambio"] = tipo_cambio
                 dte["dte"]["regimen2989"] = False
                 dte["dte"]["regimenISR"] = "RET_DEFINITIVA"
                 dte["dte"]["correoComprador"] = "N/A"
@@ -90,13 +92,13 @@ class AccountInvoice(models.Model):
                 dte["dte"]["nombreComercialRazonSocialVendedor"] = factura.company_id.name
                 dte["dte"]["nombreCompletoVendedor"] = factura.company_id.name
                 dte["dte"]["idDispositivo"] = factura.journal_id.dispositivo_gface
-                dte["dte"]["importeBruto"] = factura.amount_untaxed
+                dte["dte"]["importeBruto"] = factura.amount_untaxed * tipo_cambio
                 dte["dte"]["importeDescuento"] = descuento_total
                 dte["dte"]["importeTotalExento"] = 0
                 dte["dte"]["importeOtrosImpuestos"] = 0
-                dte["dte"]["importeNetoGravado"] = factura.amount_total
-                dte["dte"]["detalleImpuestosIva"] = factura.amount_tax
-                dte["dte"]["montoTotalOperacion"] = factura.amount_total
+                dte["dte"]["importeNetoGravado"] = factura.amount_total * tipo_cambio
+                dte["dte"]["detalleImpuestosIva"] = factura.amount_tax * tipo_cambio
+                dte["dte"]["montoTotalOperacion"] = factura.amount_total * tipo_cambio
                 dte["dte"]["descripcionOtroImpuesto"] = "N/A"
                 dte["dte"]["observaciones"] = "N/A"
                 dte["dte"]["detalleDte"] = detalles
